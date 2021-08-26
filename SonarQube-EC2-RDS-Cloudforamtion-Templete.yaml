@@ -78,7 +78,7 @@ Resources:
           yum update -y
           yum install -y java-11-amazon-corretto wget unzip vim awscli jq
 
-          PKG=sonarqube-8.7.0.41497
+          PKG=sonarqube-9.0.1.46107
           wget https://binaries.sonarsource.com/Distribution/sonarqube/$PKG.zip
 
           mkdir /opt/sonar
@@ -91,12 +91,12 @@ Resources:
           useradd sonar
           chown sonar:sonar /opt/sonar/ -R
 
-          USER="sonaradmin"
-          PASS="database#123"
+          USER="sonaradminuser"
+          PASS="sonaradminuserdatabase#123"
 
           echo "sonar.jdbc.username=$USER" >> /opt/sonar/latest/conf/sonar.properties
           echo "sonar.jdbc.password=$PASS" >> /opt/sonar/latest/conf/sonar.properties
-          echo "sonar.jdbc.url=jdbc:postgresql://${RDSCluster.Endpoint.Address}/sonardb" >> /opt/sonar/latest/conf/sonar.properties
+          echo "sonar.jdbc.url=jdbc:postgresql://${RDSCluster.Endpoint.Address}/sonaradmindb" >> /opt/sonar/latest/conf/sonar.properties
           
 
           sysctl -w vm.max_map_count=524288
@@ -155,15 +155,15 @@ Resources:
   RDSCluster:
     Type: 'AWS::RDS::DBCluster'
     Properties:
-      MasterUsername: "sonaradmin"
-      MasterUserPassword: "database#123"
-      DBClusterIdentifier: "sonardb"
+      MasterUsername: "sonaradminuser"
+      MasterUserPassword: "sonaradminuserdatabase#123"
+      DBClusterIdentifier: "sonaradmindb"
       Engine: aurora-postgresql
       EngineMode: provisioned
       DBSubnetGroupName: !Ref DBSubnetGroup
       DBClusterParameterGroupName: default.aurora-postgresql11
       Port: 5432
-      DatabaseName: "sonardb"
+      DatabaseName: "sonaradmindb"
       VpcSecurityGroupIds:
         - !Ref DBSG
 
