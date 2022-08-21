@@ -8,6 +8,8 @@ AWS Instance t2.Medium
 
 
 RDSCluster:
+
+
       MasterUsername: "sonaradminuser"
       
       MasterUserPassword: "sonaradminuserdatabase#123"
